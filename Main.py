@@ -63,7 +63,7 @@ def text_generator():
             word=word+','
         if random.randrange(0,8)==6: #Random simbol
             word=string.punctuation[random.randrange(0,len(string.punctuation))]
-        if random.randrange(0,50)==47: #Digit
+        if random.randrange(0,25)==20: #Digit
             word=str(random.randrange(0,999))
         if len(my_str+' '+word)<TF_width:
             my_str=my_str+' '+word
@@ -139,20 +139,22 @@ def write(event):
     except:
         pass
     previous_pressed=event.char
-    if len(line)==symbol_counter+1:
-        symbol_counter=0
-        speed(line)
-        line=text_generator()
-        print_grey()
-    else:
-        if event.char not in string.whitespace or event.char==' ': #if printable
-            if event.char==line[symbol_counter]:
+    if event.char not in string.whitespace or event.char==' ': #if printable
+        if event.char==line[symbol_counter]:
+            if len(line)==symbol_counter+1:
+                symbol_counter=0
+                speed(line)
+                line=text_generator()
+                print_grey()
+            else:
                 print_black()
                 symbol_counter=symbol_counter+1
-            else:
-                print_red()
+
+
         else:
-            pass
+            print_red()
+    else:
+        pass
 
 def speed(text):
     global timer
