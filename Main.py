@@ -55,24 +55,14 @@ def text_generator():
     my_str=''
     while True:
         word=dict[random.randrange(0,len(dict)-2)]
-        if my_str=='':#Capitalize first letter of the string
-            word=word.capitalize()
-        if random.randrange(0,5)==4: #Capitalize random word
-            word=word.capitalize()
-            if len(my_str)>1: #Dot before capitalized word
-                my_str=my_str[:-2]+'.'
-        if random.randrange(0,10)==7: #Coma after random word
-            word=word+','
-        if random.randrange(0,8)==6: #Random simbol
-            word=string.punctuation[random.randrange(0,len(string.punctuation))]
-        if random.randrange(0,25)==20: #Digit
-            word=str(random.randrange(0,999))
-        if len(my_str+' '+word)<TF_width:
-            my_str=my_str+' '+word
-        else:
-            a=my_str.replace('\n','')[1:]
-            timer=int(time.time())
-            return a
+        word=word.capitalize()
+        for ff in range(0,3):
+            word=word+' '+string.punctuation[random.randrange(0,len(string.punctuation))]
+        word=word+' '+str(random.randrange(0,999))
+
+        a=word
+        timer=int(time.time())
+        return a[:325]
 
 def print_black():
     log['state'] = 'normal'
@@ -141,22 +131,31 @@ def write(event):
     except:
         pass
     previous_pressed=event.char
-    if event.char not in string.whitespace or event.char==' ': #if printable
-        if event.char==line[symbol_counter]:
-            if len(line)==symbol_counter+1:
-                symbol_counter=0
-                speed(line)
-                line=text_generator()
-                print_grey()
-            else:
-                print_black()
-                symbol_counter=symbol_counter+1
 
-
-        else:
-            print_red()
+    if ord(event.char)==27:
+        print (ord(event.char))# !!!!!!!!!!!!!!!!!!!!!!!   esc pressed
+        symbol_counter=0
+        speed(line)
+        line=text_generator()
+        print (len(line),line)
+        print_grey()
     else:
-        pass
+        if event.char not in string.whitespace or event.char==' ': #if printable
+            if event.char==line[symbol_counter]:
+                if len(line)==symbol_counter+1:
+                    symbol_counter=0
+                    speed(line)
+                    line=text_generator()
+                    print_grey()
+                else:
+                    print_black()
+                    symbol_counter=symbol_counter+1
+
+
+            else:
+                print_red()
+        else:
+            pass
 
 def speed(text):
     global timer
