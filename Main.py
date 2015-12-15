@@ -2,7 +2,8 @@ from tkinter import *
 import string
 import random
 import time
-
+from sensor_sql import SQL
+sql=SQL()
 def const():
     global timer,line_counter,symbol_counter,dict,TF_width,keyboard,ascii,hh,bb,previous_pressed
     a=''
@@ -10,7 +11,7 @@ def const():
     line_counter=0
     symbol_counter=0
     dict=[]
-    TF_width=120
+    TF_width=320 #120 amount of simbols in text to type
     keyboard={0:5,1:16,2:16,3:16,4:15,5:14,6:10}
     ascii={33 : '!\n1' ,34 : '"\n\'' ,35 : '#\n3' ,36 : '$\n4' ,37 : '%\n5' ,38 : '&\n7' ,39 : "\"\n'" ,
            40 : '(\n9' ,41 : ')\n0' ,42 : '*\n8' ,43 : '+\n=' ,44 : '<\n,' ,45 : '-\n_' ,46 : '>\n.' ,
@@ -43,9 +44,10 @@ def const():
         32:'6_5',9:'3_1',13:'4_13',127:'2_14',27:'1_1'}
     bb={'3_1':9,'4_13':13,'1_1':27,'6_5':32,'2_2':33,'4_12':34,'2_4':35,'2_5':36,'2_6':37,'2_8':38,'4_12':39,'2_10':40,'2_11':41,'2_9':42,'2_13':43,'5_9':44,'2_12':45,'5_10':46,'5_11':47,'2_11':48,'2_2':49,'2_3':50,'2_4':51,'2_5':52,'2_6':53,'2_7':54,'2_8':55,'2_9':56,'2_10':57,'4_11':58,'4_11':59,'5_9':60,'2_13':61,'5_10':62,'5_11':63,'2_3':64,'4_2':65,'5_6':66,'5_4':67,'4_4':68,'3_4':69,'4_5':70,'4_6':71,'4_7':72,'3_9':73,'4_8':74,'4_9':75,'4_10':76,'5_8':77,'5_7':78,'3_10':79,'3_11':80,'3_2':81,'3_5':82,'4_3':83,'3_6':84,'3_8':85,'5_5':86,'3_3':87,'5_3':88,'3_7':89,'5_2':90,'3_12':91,'3_14':92,'3_13':93,'2_7':94,'2_12':95,'2_1':96,'4_2':97,'5_6':98,'5_4':99,'4_4':100,'3_4':101,'4_5':102,'4_6':103,'4_7':104,'3_9':105,'4_8':106,'4_9':107,'4_10':108,'5_8':109,'5_7':110,'3_10':111,'3_11':112,'3_2':113,'3_5':114,'4_3':115,'3_6':116,'3_8':117,'5_5':118,'3_3':119,'5_3':120,'3_7':121,'5_2':122,'3_12':123,'3_14':124,'3_13':125,'2_1':126,'2_14':127}
     previous_pressed=''
-    with open('wordsEn.txt','r') as file:
-        for word in file.readlines():
-            dict.append(word)
+    tmp=sql.raw_request('SELECT * FROM words')
+    for line in tmp:
+        dict.append(line[0]+' - '+line[2]+'. '+line[1])
+
 const()
 
 def text_generator():
@@ -98,10 +100,10 @@ def print_grey():
 def show_keyboard(event):
     if labels['0_3'].cget('image')=='pyimage7':
         labels['0_3'].configure(image=images_pressed['0_3'])
-        root.geometry('940x550')
+        root.geometry('940x640')#940x550
     else:
         labels['0_3'].configure(image=images_unpressed['0_3'])
-        root.geometry('940x175')
+        root.geometry('940x264')
 
 def draw_keyboard():
     global images_unpressed,images_pressed,labels
@@ -165,7 +167,7 @@ def speed(text):
 
 
 root = Tk()
-root.geometry('940x175')
+root.geometry('940x264')
 root.bind('<Key>',write)
 
 #--------- 1 Dummy-------------
@@ -184,7 +186,7 @@ root.bind('<Key>',write)
 draw_keyboard()
 def draw_text_field():
     global log
-    log = Text(frame_text, width=130, height=6,wrap='word')
+    log = Text(frame_text, width=130, height=12,wrap='word')
     log.tag_configure("black", foreground="black",font=("Helvetica", 30, "underline"),justify='center')
     log.tag_configure("red", foreground="red",font=("Helvetica", 32),justify='center')
     log.tag_configure("grey", foreground="grey",font=("Helvetica", 30),justify='center')
