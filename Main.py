@@ -56,13 +56,12 @@ def text_generator():
     while True:
         word=dict[random.randrange(0,len(dict)-2)]
         word=word.capitalize()
-        for z in range(0,3):
+        if len(word)>200:word=word[:250]
+        for z in range(0,4):
             for ff in range(0,3):
-                word=word+' '+string.punctuation[random.randrange(0,len(string.punctuation))]
-            word=word+' '+str(random.randrange(0,999))
+                word=word+string.punctuation[random.randrange(0,len(string.punctuation))]
 
-
-        #a=word
+            word=word+' '+random.choice(["{","["])+str(random.randrange(0,999))+random.choice(["]","}"])
         timer=int(time.time())
         return word[:325]
 
